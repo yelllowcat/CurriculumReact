@@ -2,7 +2,7 @@ import { useState } from "react"
 export const Experience = ({isSubmited}) =>{
     const [company, setCompany] = useState('');
     const [position, setposition] = useState('');
-    const [resonsabilities, setResponsabilities] = useState([]);
+    const [responsabilities, setResponsabilities] = useState({});
     const [nresp, setNresp] = useState(1);
 
     const [fisrtDate, setFirstDate] = useState('');
@@ -15,7 +15,12 @@ export const Experience = ({isSubmited}) =>{
     setposition(e.target.value);
   }
    function handleResponsabilities(e) {
-    setResponsabilities(e.target.value);
+    const index=e.target.id;
+    
+    responsabilities[index] =e.target.value;
+
+        setResponsabilities(responsabilities)
+
   }
   function handleFirst(e) {
     setFirstDate(e.target.value);
@@ -24,14 +29,21 @@ export const Experience = ({isSubmited}) =>{
     setSecondDate(e.target.value);
   }
   function addInput(){
-    setNresp(nresp+1)
+    if (nresp<5) {
+          setNresp(nresp+1)
+
+    }
   }
   
   const respList =[];
     for (let i = 0; i < nresp; i++) {
-respList.push(<input type="text"   placeholder={"Resonsabilities"}/> ) }
+
+respList.push(<input type="text" key={[i]} id={i}  onChange={handleResponsabilities}  placeholder={"Resonsabilities"}/> )
+
+}
   
  if (isSubmited) {
+
     return <div className="formSection">
     <h2>General</h2>
 
@@ -39,10 +51,10 @@ respList.push(<input type="text"   placeholder={"Resonsabilities"}/> ) }
   <p><span>Position: </span>{position}</p>
   <p>Resonsabilities:</p>
   <ul>
-    {resonsabilities.map((resp) =>{
-      return <li key={resp}>{resp}</li>
-    }
-    )}
+    {Object.values(responsabilities).map((e,index)=>{
+return <li key={index}>{e}</li>
+    })}
+    
   </ul>
   <label >Date</label>
   <p>From {fisrtDate ? fisrtDate : "not especified"}</p>
